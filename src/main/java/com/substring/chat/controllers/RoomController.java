@@ -3,9 +3,11 @@ package com.substring.chat.controllers;
 import com.substring.chat.config.AppConstants;
 import com.substring.chat.entities.Message;
 import com.substring.chat.entities.Room;
+import com.substring.chat.payloads.ApiResponse;
 import com.substring.chat.payloads.RoomRequest;
 import com.substring.chat.repositories.RoomRepository;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -31,19 +33,47 @@ public class RoomController {
     }
     //create room
     @PostMapping("create-room")
-    public ResponseEntity<?> creteRoom(@RequestBody RoomRequest roomRequest){
-        if(roomRepository.findByRoomId(roomRequest.getRoomId()) != null){
-            //room is already there.
-            return ResponseEntity.badRequest().body("room already exists");
+    public ResponseEntity<?> createRoom(@RequestBody RoomRequest roomRequest){
+
+        Room room = roomRepository.findByRoomId(roomRequest.getRoomId());
+
+        if(room != null){
+            return ResponseEntity.badRequest().body(
+                    new ApiResponse<>(
+                            false,
+                            "room already exists",
+                            null,
+                            HttpStatus.BAD_REQUEST.toString(),
+                            LocalDateTime.now()
+                    )
+            );
         }
-        //create new room
-        Room room = new Room();
-        room.setRoomId(roomRequest.getRoomId());
-        room.setPassword(roomRequest.getPassword());
-        Room savedRoom = roomRepository.save(room);
-        return ResponseEntity.status(HttpStatus.CREATED).body(room);
+        if(roomRequest.getPassword().length()<4){
+            return ResponseEntity.badRequest().body(
+                    new ApiResponse<>(
+                            false,
+                            "password should be of 4 or more characters",
+                            null,
+                            HttpStatus.BAD_REQUEST.toString(),
+                            LocalDateTime.now()
+                    )
+            );
 
         }
+        Room newRoom = new Room();
+        newRoom.setRoomId(roomRequest.getRoomId());
+        newRoom.setPassword(roomRequest.getPassword());
+        Room savedRoom = roomRepository.save(newRoom);
+
+        ApiResponse<Room> apiResponse = new ApiResponse<>(
+                true,
+                "room created successfully",
+                savedRoom,
+                HttpStatus.CREATED.toString(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(apiResponse,HttpStatus.CREATED);
+    }
 
     @PostMapping("join-room")
     public ResponseEntity<?> joinRoom(@RequestBody RoomRequest roomRequest){
@@ -51,19 +81,43 @@ public class RoomController {
     	Room room = roomRepository.findByRoomId(roomRequest.getRoomId());
     	if(room==null) {
             log.info("room not found");
-    		return ResponseEntity.badRequest().body("room not found");
+    		return ResponseEntity.badRequest().body(
+                    new ApiResponse<>(
+                            false,
+                            "room does not exists",
+                            null,
+                            HttpStatus.BAD_REQUEST.toString(),
+                            LocalDateTime.now()
+                    )
+            );
     	}else{
             if(room.getPassword().equals(roomRequest.getPassword())){
                 log.info("got the room , returned it");
-                return ResponseEntity.ok(room);
+                return ResponseEntity.ok(
+                        new ApiResponse<>(
+                                true,
+                                "room joined successfully",
+                                null,
+                                HttpStatus.OK.toString(),
+                                LocalDateTime.now()
+                        )
+                );
             }else{
-                return ResponseEntity.ok("wrong password");
+                return ResponseEntity.badRequest().body(
+                        new ApiResponse<>(
+                                false,
+                                "wrong password",
+                                null,
+                                HttpStatus.BAD_REQUEST.toString(),
+                                LocalDateTime.now()
+                        )
+                );
             }
         }
     }
 
     @GetMapping("/{roomId}/messages")
-    public ResponseEntity<List<Message>> getMessages(
+    public ResponseEntity<?> getMessages(
             @PathVariable String roomId,
             @RequestParam(value="page", defaultValue="0", required=false) int page,
             @RequestParam(value="size", defaultValue="20", required=false) int size) {
@@ -89,6 +143,12 @@ public class RoomController {
         List<Message> paginatedMessages = messages.subList(start, end);
 
         log.info("Returning {} messages for room: {}", paginatedMessages.size(), roomId);
-        return ResponseEntity.ok(paginatedMessages);
+        return ResponseEntity.ok(new ApiResponse<>(
+                true,
+                "messages retrieved successfully",
+                paginatedMessages,
+                HttpStatus.OK.toString(),
+                LocalDateTime.now()
+        ));
     }
 }
