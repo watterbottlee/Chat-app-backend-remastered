@@ -6,10 +6,6 @@ A real-time chat application built with Spring Boot and WebSocket technology. Cr
 this repo is made just to explore websockets and thats the reason i havent implemented user login and sessions. this repo is to cater my experience in websockets and to make students / other newcommers a resource 
 to learn websockets with spring boot in a simplest way possible. every block is as loosely coupled as possible. and this is only the signaling server for the sockets i will try to provide a simple minimalist react app to facilitate this socket channels and make a simple chat app. so stay tuned and follow me. i will add the react repo here later on. so if you are a dev like me feel free to fork, clone, pull and add features.
 
-## sample api test results
-https://github.com/user-attachments/assets/4c3b9f6e-8694-40c1-ab17-cdd4249975da
-
-
 ## Features
 
 - **Real-time Messaging**: Instant message delivery using WebSocket protocol
@@ -17,6 +13,9 @@ https://github.com/user-attachments/assets/4c3b9f6e-8694-40c1-ab17-cdd4249975da
 - **Password Protection**: Secure your rooms with password authentication
 - **Message History**: Paginated message retrieval for chat history
 - **REST + WebSocket**: Hybrid architecture combining REST APIs for room management and WebSocket for real-time chat
+
+## sample api test results
+https://github.com/user-attachments/assets/4c3b9f6e-8694-40c1-ab17-cdd4249975da
 
 ## 🏗️ Project Structure
 
