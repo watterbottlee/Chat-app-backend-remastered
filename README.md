@@ -22,7 +22,7 @@ A real-time chat application built with Spring Boot and WebSocket technology. Cr
 
 1. Clone the repository
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/watterbottlee/Chat-app-backend-remastered
 cd chat-app-backend
 ```
 
@@ -57,7 +57,7 @@ POST /api/v1/rooms/create-room
 Content-Type: application/json
 
 {
-  "roomId": "my-room",
+  "roomId": "test-room",
   "password": "secret123"
 }
 ```
@@ -68,7 +68,7 @@ POST /api/v1/rooms/join-room
 Content-Type: application/json
 
 {
-  "roomId": "my-room",
+  "roomId": "test-room",
   "password": "secret123"
 }
 ```
