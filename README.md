@@ -2,6 +2,10 @@
 
 A real-time chat application built with Spring Boot and WebSocket technology. Create password-protected chat rooms and communicate instantly with other users through a simple, efficient messaging system.
 
+## Author notes (-kanishk)
+this repo is made just to explore websockets and thats the reason i havent implemented user login and sessions. this repo is to cater my experience in websockets and to make students / other newcommers a resource 
+to learn websockets with spring boot in a simplest way possible. every block is as loosely coupled as possible. and this is only the signaling server for the sockets i will try to provide a simple minimalist react app to facilitate this socket channels and make a simple chat app. so stay tuned and follow me. i will add the react repo here later on. so if you are a dev like me feel free to fork, clone, pull and add features.
+
 ## Features
 
 - **Real-time Messaging**: Instant message delivery using WebSocket protocol
@@ -10,7 +14,32 @@ A real-time chat application built with Spring Boot and WebSocket technology. Cr
 - **Message History**: Paginated message retrieval for chat history
 - **REST + WebSocket**: Hybrid architecture combining REST APIs for room management and WebSocket for real-time chat
 
-## Quick Start
+## 🏗️ Project Structure
+
+```
+chat-app-backend/
+├── src/main/java/com/substring/chat/
+│   ├── ChatAppBackendApplication.java    # Main application entry point
+│   ├── config/
+│   │   ├── AppConstants.java             # Application-wide constants
+│   │   ├── CorsConfig.java               # CORS configuration
+│   │   └── WebSocketConfig.java          # WebSocket setup
+│   ├── controllers/
+│   │   ├── ChatController.java           # WebSocket message handling
+│   │   └── RoomController.java           # REST API for rooms
+│   ├── entities/
+│   │   ├── Message.java                  # Message entity
+│   │   └── Room.java                     # Room entity
+│   ├── payloads/
+│   │   ├── ApiResponse.java              # Standard API response wrapper
+│   │   ├── MessageRequest.java           # Message request DTO
+│   │   └── RoomRequest.java              # Room request DTO
+│   └── repositories/
+│       └── RoomRepository.java           # Data access layer
+└── src/main/resources/
+    └── application.properties            # Application configuration
+```
+
 
 ### Prerequisites
 
@@ -98,32 +127,6 @@ Subscribe to a room's message channel:
 Send messages to a room:
 ```
 /app/chat/{roomId}
-```
-
-## 🏗️ Project Structure
-
-```
-chat-app-backend/
-├── src/main/java/com/substring/chat/
-│   ├── ChatAppBackendApplication.java    # Main application entry point
-│   ├── config/
-│   │   ├── AppConstants.java             # Application-wide constants
-│   │   ├── CorsConfig.java               # CORS configuration
-│   │   └── WebSocketConfig.java          # WebSocket setup
-│   ├── controllers/
-│   │   ├── ChatController.java           # WebSocket message handling
-│   │   └── RoomController.java           # REST API for rooms
-│   ├── entities/
-│   │   ├── Message.java                  # Message entity
-│   │   └── Room.java                     # Room entity
-│   ├── payloads/
-│   │   ├── ApiResponse.java              # Standard API response wrapper
-│   │   ├── MessageRequest.java           # Message request DTO
-│   │   └── RoomRequest.java              # Room request DTO
-│   └── repositories/
-│       └── RoomRepository.java           # Data access layer
-└── src/main/resources/
-    └── application.properties            # Application configuration
 ```
 
 ## 🔧 Technology Stack
