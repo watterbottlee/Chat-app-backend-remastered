@@ -33,7 +33,7 @@ public class ChatController {
     }
 
     @MessageMapping("/sendMessage/{roomId}")
-    @SendTo("/topic/room/{roomId}")  // Add this back!
+    @SendTo("/topic/room/{roomId}")
     public Message sendMessage(
             @DestinationVariable String roomId,
             @RequestBody MessageRequest request) {

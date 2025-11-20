@@ -38,6 +38,7 @@ public class RoomController {
         Room room = roomRepository.findByRoomId(roomRequest.getRoomId());
 
         if(room != null){
+            log.info("create room request denied");
             return ResponseEntity.badRequest().body(
                     new ApiResponse<>(
                             false,
@@ -49,6 +50,7 @@ public class RoomController {
             );
         }
         if(roomRequest.getPassword().length()<4){
+            log.info("create room request denied");
             return ResponseEntity.badRequest().body(
                     new ApiResponse<>(
                             false,
@@ -72,6 +74,7 @@ public class RoomController {
                 HttpStatus.CREATED.toString(),
                 LocalDateTime.now()
         );
+        log.info("a new room has been created");
         return new ResponseEntity<>(apiResponse,HttpStatus.CREATED);
     }
 
@@ -133,7 +136,13 @@ public class RoomController {
         List<Message> messages = room.getMessages();
         if(messages == null || messages.isEmpty()) {
             log.info("No messages in room: {}", roomId);
-            return ResponseEntity.ok(Collections.emptyList());
+            return ResponseEntity.ok(new ApiResponse<>(
+                    true,
+                    "no messages available",
+                    Collections.emptyList(),
+                    HttpStatus.OK.toString(),
+                    LocalDateTime.now()
+            ));
         }
 
         int totalMessages = messages.size();
