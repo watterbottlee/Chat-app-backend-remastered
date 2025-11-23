@@ -43,20 +43,17 @@ public class ChatController {
         System.out.println("Sender: " + request.getSender());
         System.out.println("Content: " + request.getContent());
 
-        // Validate room exists FIRST
         Room room = roomRepository.findByRoomId(roomId);
         if (room == null) {
             System.err.println("Room not found: " + roomId);
             throw new RuntimeException("Room not found: " + roomId);
         }
 
-        // Create the message
         Message message = new Message();
         message.setContent(request.getContent().trim());
         message.setSender(request.getSender().trim());
         message.setTimestamp(LocalDateTime.now());
 
-        // Atomic update - push message to the messages array
         Query query = new Query(Criteria.where("roomId").is(roomId));
         Update update = new Update().push("messages", message);
 
@@ -68,10 +65,6 @@ public class ChatController {
         }
 
         System.out.println("Message saved and will be broadcast!");
-
-        // Remove this line - @SendTo handles it automatically
-        // messagingTemplate.convertAndSend("/topic/room/" + roomId, message);
-
-        return message;  // This gets broadcast to /topic/room/{roomId}
+        return message;
     }
 }
